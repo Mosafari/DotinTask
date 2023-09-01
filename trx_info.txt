@@ -1,0 +1,82 @@
+----------------------------------------------------------------------------------------------
+
+                                  transaction data processing
+
+----------------------------------------------------------------------------------------------
+
+	file contains rest of transaction steps. each step present in separated line. each transaction processed in 
+different thread witch specified with thread name. after ending transaction the thread has been released for another 
+transaction. the problem is generating statistical report of this data.
+
+data pattern: 
+	date_in_millisecond [thread name] - body
+
+example:
+	2022-04-11 12:39:55,932 [thread-1] - starting { "amount":"262500","trx":"charge","user":"19309" }
+	2022-04-11 12:39:56,122 [thread-1] - processing 
+	2022-04-11 12:39:56,430 [thread-1] - end {"code"="OK"}
+
+
+description:
+	trx type={"bill", "charge", "balance"}
+	response code={"OK","NG"}
+	time step 1 => different between starting and processing => 190ms
+	time step 2 => different between processing and end => 308ms
+
+notes:
+	1-cycle of each transaction is in unique thread number
+	2-each unique thread starting, process, and end and after that resume other transaction processing. for example
+	
+	
+	t1 [thread-1] - starting
+	t2 [thread-1] - processing
+	t3 [thread-1] - end ...
+	...
+	t4 [thread-1] - starting
+	t5 [thread-1] - processing
+	t6 [thread-1] - end ...
+	
+	transaction 1: t1 to t3
+	transaction 2: t4 to t6
+	
+	4-always t4>t3
+
+tests
+----------------------------------------------------------------------------------------------
+test1:
+	create result of time spending of each transaction in the file
+
+	input: trx.txt
+	output: result1.txt
+	description: each line contain user id, trx type, response code and time steps separated with comma. order of result
+	is not mentioned.
+	
+	example: 
+		19309,charge,OK,190,308
+		...
+		
+----------------------------------------------------------------------------------------------
+test2:
+	calculate average of each step group by trx type
+
+	input: trx.txt
+	output: result2.txt
+	description: each line contain trx_type and time steps separated with comma.
+	
+	example: 
+		balance,190,308 
+		bill,200,200 
+		charge,100,100 
+		
+----------------------------------------------------------------------------------------------		
+test3: (optional to answer)
+	calculate maximum concurrency
+find count of transaction processed simultaneous in the other hand find execution time of transactions 
+witch are overlapped. 
+
+	input: trx.txt
+	output: result3.txt
+	
+	example: 
+		10 
+		
