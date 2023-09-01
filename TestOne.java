@@ -45,7 +45,7 @@ public class TestOne{
                     // store data to txt file
                     // If the file doesn't exist, create it
                     File result = new File("result1.txt");
-                    System.out.println(threaddata.get("body" + data[2]).split("\"")[11]);
+                    // System.out.println(threaddata.get("body" + data[2]).split("\"")[11]);
                     if (!result.exists()) {
                         result.createNewFile();
                     }
@@ -74,7 +74,7 @@ public class TestOne{
                     // Del after add to file
                     // threaddata.remove(data[2]);
                 }
-                System.out.println(threaddata);
+                // System.out.println(threaddata);
                 // System.out.println(cleandata);
             }
         } catch (IOException e) {
