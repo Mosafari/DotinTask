@@ -7,8 +7,11 @@ public class TestOne{
         try (BufferedReader reader = new BufferedReader(new FileReader("trx.txt"))) {
             String line;
             line = reader.readLine();
-            System.out.println(line);
+            String[] data = line.split(" "); //split one line by " "(space)
             
+            for(String d: data){
+                System.out.println(d); // print each element
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
